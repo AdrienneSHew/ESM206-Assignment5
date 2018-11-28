@@ -29,4 +29,13 @@ PHDs
 
 ```
 
+```{r}
+#attempting to do exploratory graphs on median salaray data in order to determine normality....yeaaa, not sure how to get it to plot; will ask Allison or someone after lab
+
+PHD_median_hist <- ggplot(PHD_median_sal, aes(x = Employment))+
+  geom_histogram()
+
+PHD_median_hist
+
+```
 
