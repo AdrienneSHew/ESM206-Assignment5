@@ -1,0 +1,32 @@
+---
+title: 'ESM 206 Assignment #5'
+author: "Adrienne Hewitt, Shellby Johnson"
+date: "November 27, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+#We may have to discuss how best to sinplify the data sets. Not sure if the alterations that I made are sufficient. 
+
+library(tidyverse)
+
+Faculty_sal<-read_csv("faculty_salary.csv")
+Faculty_sal
+
+Grad_enroll<-read_csv("grad_enrollment.csv")
+Grad_enroll
+
+PHD_median_sal<-read_csv("Median_sal_PHD.csv")
+PHD_median_sal
+
+PHDs<-read_csv("PHDs_simple.csv")
+PHDs
+
+```
+
+
