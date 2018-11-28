@@ -21,21 +21,33 @@ Faculty_sal
 Grad_enroll<-read_csv("grad_enrollment.csv")
 Grad_enroll
 
-PHD_median_sal<-read_csv("Median_sal_PHD.csv")
-PHD_median_sal
+NonPD_mediansalary <- read_csv("Non_postdoc_mediansalary.csv")
+NonPD_mediansalary
+
+PD_mediansalary <- read_csv("Postdoc_mediansalary.csv")
+PD_mediansalary
 
 PHDs<-read_csv("PHDs_simple.csv")
 PHDs
+
+
 
 ```
 
 ```{r}
 #attempting to do exploratory graphs on median salaray data in order to determine normality....yeaaa, not sure how to get it to plot; will ask Allison or someone after lab
 
-PHD_median_hist <- ggplot(PHD_median_sal, aes(x = Employment))+
-  geom_histogram()
 
-PHD_median_hist
+#exploratory histogram for male PD median salaries
+PD_median_hist <- ggplot(PD_mediansalary, aes(x = Male))+
+  geom_histogram( bins = 10)
+PD_median_hist
+
+PD_median_qq <- ggplot()
+
+
+
+
 
 ```
 
