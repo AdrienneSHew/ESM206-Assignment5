@@ -36,11 +36,30 @@ PHDs
 #Is there a correlation between time and the number of males/females enrolled in grad school? Perform a linear regression to answer this question. 
 
 ##########################################################################################
-#Step 1. Exploratory analysis; Does it look like describing the relationship between year and graduate enrollment using linear regression make sense?
+#Step 1. Exploratory analysis; Does it look like describing the relationship between year and graduate enrollment using linear regression makes sense?
 
-male_grad_lm<-lm()
+grad_enroll_plot<-ggplot(Grad_enroll, aes(x=Year, y=Total))+
+  geom_point()+
+  geom_point(data=Grad_enroll, aes(x=Year, y=Total_Males), color="blue")+
+  geom_point(data=Grad_enroll, aes(x=Year, y=Total_Females), color="red")
 
+grad_enroll_plot
 
+#The data is fairly linear, so I will perform the linear regressions
+#########################################################################################
+
+male_grad_lm<-lm(Total_Males~Year, data=Grad_enroll)
+male_grad_lm
+
+female_grad_lm<-lm(Total_Females~Year, data=Grad_enroll)
+female_grad_lm
+
+##########################################################################################
+#View model residuals (check for homoscedasticity, normality of the error distribution)
+
+plot(male_grad_lm)
+
+plot(female_grad_lm)
 ```
 
 
