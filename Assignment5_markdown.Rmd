@@ -12,7 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 
 library(tidyverse)
+library(kableExtra)
 
+#########################################################################################
 Faculty_sal<-read_csv("faculty_salary.csv")
 Faculty_sal
 
@@ -49,17 +51,72 @@ grad_enroll_plot
 #########################################################################################
 
 male_grad_lm<-lm(Total_Males~Year, data=Grad_enroll)
-male_grad_lm
+male_grad_lm    #Total_Males= 9069(Year)-17112153
 
 female_grad_lm<-lm(Total_Females~Year, data=Grad_enroll)
-female_grad_lm
+female_grad_lm   #Total_Females= 30126(Year)-58955502
 
 ##########################################################################################
 #View model residuals (check for homoscedasticity, normality of the error distribution)
 
+par(mfrow=c(2,2))
 plot(male_grad_lm)
 
 plot(female_grad_lm)
+
+#########################################################################################
+#Does year significantly predict male/female enrollment in grad school?
+
+summary(male_grad_lm) #R2=0.85, p<0.001
+
+summary(female_grad_lm) #R2=0.98, p<0.001
+```
+
+
+```{r}
+#Step 1a. Finalized linear model
+
+male_grad_final_graph<-ggplot(Grad_enroll, aes(x=Year, y=Total_Males))+
+  geom_point()+
+  geom_smooth(method=lm, se=TRUE, size=0.5, color="gray20")+
+  theme_bw()+
+  scale_x_continuous(expand=c(0,0), limits=c(1967,2015))
+
+male_grad_final_graph
+
+########################################################################################
+
+female_grad_final_graph<-ggplot(Grad_enroll, aes(x=Year, y=Total_Females))+
+  geom_point()+
+  geom_smooth(method=lm, se=TRUE, size=0.5, color="gray20")+
+  theme_bw()+
+  scale_x_continuous(expand=c(0,0), limits=c(1967,2015))
+
+female_grad_final_graph
+
+```
+
+```{r}
+#Step 2. Describe if and how there was a shift in PhDs awarded to females in four ﬁelds (Physical and Earth Sciences, Engineering, Education, and Humanities & Arts) in 1985, 2000, and 2015. 
+
+PHDs_women<-PHDs %>% 
+  filter(Gender=="Female") %>% 
+  group_by(Year, Field_of_study)
+
+PHDs_women
+
+#########################################################################################
+#create table of women PHDs
+
+PHDs_women_table<-PHDs %>% 
+  filter(Gender=="Female") %>% 
+  group_by(Year, Field_of_study) %>% 
+  kable() %>% 
+  kable_styling()
+
+PHDs_women_table
+
+
 ```
 
 
