@@ -11,8 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 
-#We may have to discuss how best to sinplify the data sets. Not sure if the alterations that I made are sufficient. 
-
 library(tidyverse)
 
 Faculty_sal<-read_csv("faculty_salary.csv")
@@ -33,6 +31,18 @@ PHDs
 
 
 ```
+
+```{r}
+#Is there a correlation between time and the number of males/females enrolled in grad school? Perform a linear regression to answer this question. 
+
+##########################################################################################
+#Step 1. Exploratory analysis; Does it look like describing the relationship between year and graduate enrollment using linear regression make sense?
+
+male_grad_lm<-lm()
+
+
+```
+
 
 ```{r}
 #attempting to do exploratory graphs on median salaray data in order to determine normality....yeaaa, not sure how to get it to plot; will ask Allison or someone after lab
