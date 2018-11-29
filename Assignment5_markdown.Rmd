@@ -43,7 +43,18 @@ PD_median_hist <- ggplot(PD_mediansalary, aes(x = Male))+
   geom_histogram( bins = 10)
 PD_median_hist
 
-PD_median_qq <- ggplot()
+# didn't do exploratory graphs for others because according to Allison, this is the test that needs to be done (from someone who went to office hours yesterday)
+
+#paired, 2-sample MWU test (i.e. wilcoxon signed rank test) of post doc median salaries bwteen males and females
+
+paired_MWU_PD <- wilcox.test(PD_mediansalary$Male, PD_mediansalary$Female, paired = TRUE)  
+  
+paired_MWU_PD
+
+#paired, 2-sample MWU test (i.e. wilcoxon signed rank test) of nonpost doc median salaries bwteen males and females
+paired_MWU_NonPD <- wilcox.test(NonPD_mediansalary$Male, NonPD_mediansalary$Female, paired = TRUE)  
+  
+paired_MWU_NonPD
 
 
 
