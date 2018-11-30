@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(kableExtra)
 library(stargazer)
+library(car)
 
 #########################################################################################
 Faculty_sal<-read_csv("faculty_salary.csv")
@@ -122,7 +123,8 @@ PHDs_women_table
 
 
 ```{r}
-#attempting to do exploratory graphs on median salaray data in order to determine normality....yeaaa, not sure how to get it to plot; will ask Allison or someone after lab
+
+#3. attempting to do exploratory graphs on median salaray data in order to determine normality....yeaaa, not sure how to get it to plot; will ask Allison or someone after lab
 
 
 #exploratory histogram for male PD median salaries
@@ -136,12 +138,12 @@ PD_median_hist
 
 paired_MWU_PD <- wilcox.test(PD_mediansalary$Male, PD_mediansalary$Female, paired = TRUE)  
   
-paired_MWU_PD
+paired_MWU_PD #p-value = 0.8884
 
 #paired, 2-sample MWU test (i.e. wilcoxon signed rank test) of nonpost doc median salaries bwteen males and females
 paired_MWU_NonPD <- wilcox.test(NonPD_mediansalary$Male, NonPD_mediansalary$Female, paired = TRUE)  
   
-paired_MWU_NonPD
+paired_MWU_NonPD #p-value = 0.002572
 
 
 
@@ -150,7 +152,52 @@ paired_MWU_NonPD
 ```
 
 ```{r}
-#Multivariate Linear Regression Model 
+#4. Multivariate Linear Regression Model 
+
+facultysal_lm <- lm(Salary ~ Faculty_Rank + Discipline + Years_Since_PhD + Years_Faculty_Service + Sex, data = Faculty_sal)
+
+summary(facultysal_lm)
+
+# This initial model revealed that with every 1 year increase in teaching experience (service), salary is expected to decrease by ~ $490.00. This doesn't make a whole bunch of sense as more experience usually leads to an increase in pay. 
+
+#Makes me think that there may be collinearity between both "years" variables
+
+### Check for collinearity between service and years since PhD
+
+faculty_coll <- cor(Faculty_sal$Years_Since_PhD, Faculty_sal$Years_Faculty_Service)
+
+faculty_coll
+#0.9096491 <- this indicates strong linear relationship
+
+
+# Looking at distribution of residuals 
+
+```
+
+```{r}
+#4a. 2nd version of model excluding "Years_since_PhD" 
+
+#Choosing to exclude this variable, because conceptually, how long an individual has been teaching seems like it would be more relevant and would include having a PhD. How long a person has had their PhD, would weigh less if they haven't also been teaching.
+
+facultysal_lm2 <- lm(Salary ~ Faculty_Rank + Discipline + Years_Faculty_Service + Sex, data = Faculty_sal)
+
+summary(facultysal_lm2)
+
+#model still revealed salary decaresing with increasing service years
+
+```
+
+```{r}
+
+#4b. 3rd version of model excluding "Years_Faculty_Service"
+
+facultysal_lm3 <- lm(Salary ~ Faculty_Rank + Discipline + Years_Since_PhD + Sex, data = Faculty_sal)
+
+summary(facultysal_lm3)
+
+# This model showed salary increasing when # of years since PhD increases
+
+plot(facultysal_lm3)
 
 ```
 
