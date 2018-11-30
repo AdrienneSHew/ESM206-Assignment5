@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(kableExtra)
+library(stargazer)
 
 #########################################################################################
 Faculty_sal<-read_csv("faculty_salary.csv")
@@ -145,6 +146,11 @@ paired_MWU_NonPD
 
 
 
+
+```
+
+```{r}
+#Multivariate Linear Regression Model 
 
 ```
 
