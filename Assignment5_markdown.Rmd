@@ -102,7 +102,8 @@ female_grad_final_graph
 #Step 2. Describe if and how there was a shift in PhDs awarded to females in four ﬁelds (Physical and Earth Sciences, Engineering, Education, and Humanities & Arts) in 1985, 2000, and 2015. 
 
 PHDs_women<-PHDs %>% 
-  filter(Gender=="Female") %>% 
+  filter(Gender=="Female") %>%
+  mutate(Total=Number*100) %>% 
   group_by(Year, Field_of_study)
 
 PHDs_women
