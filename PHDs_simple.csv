@@ -1,25 +1,25 @@
 Field_of_study,Year,Gender,Number,Percent
-Physical sciences and earth sciences,1985,Female,569,16.30%
-Engineering,1985,Female,198,6.30%
-Education,1985,Female,"3,491",51.80%
-Humanities and arts,1985,Female,"1,392",40.90%
-Physical sciences and earth sciences,2000,Female,"1,022",25.20%
-Engineering,2000,Female,838,15.80%
-Education,2000,Female,"4,179",64.90%
-Humanities and arts,2000,Female,"2,672",49.00%
-Physical sciences and earth sciences,2015,Female,"1,988",33.60%
-Engineering,2015,Female,"2,301",23.20%
-Education,2015,Female,"3,502",68.50%
-Humanities and arts,2015,Female,"2,832",50.60%
-Physical sciences and earth sciences,1985,Male,"2,922",83.70%
-Engineering,1985,Male,"2,968",93.70%
-Education,1985,Male,"3,242",48.20%
-Humanities and arts,1985,Male,"2,014",59.10%
-Physical sciences and earth sciences,2000,Male,"3,041",74.80%
-Engineering,2000,Male,"4,459",84.20%
-Education,2000,Male,"2,260",35.10%
-Humanities and arts,2000,Male,"2,786",51.00%
-Physical sciences and earth sciences,2015,Male,"3,935",66.40%
-Engineering,2015,Male,"7,596",76.80%
-Education,2015,Male,"1,614",31.50%
-Humanities and arts,2015,Male,"2,767",49.40%
+Physical sciences and earth sciences,1985,Female,569,16.3
+Engineering,1985,Female,198,6.3
+Education,1985,Female,"3,491",51.8
+Humanities and arts,1985,Female,"1,392",40.9
+Physical sciences and earth sciences,2000,Female,"1,022",25.2
+Engineering,2000,Female,838,15.8
+Education,2000,Female,"4,179",64.9
+Humanities and arts,2000,Female,"2,672",49
+Physical sciences and earth sciences,2015,Female,"1,988",33.6
+Engineering,2015,Female,"2,301",23.2
+Education,2015,Female,"3,502",68.5
+Humanities and arts,2015,Female,"2,832",50.6
+Physical sciences and earth sciences,1985,Male,"2,922",83.7
+Engineering,1985,Male,"2,968",93.7
+Education,1985,Male,"3,242",48.2
+Humanities and arts,1985,Male,"2,014",59.1
+Physical sciences and earth sciences,2000,Male,"3,041",74.8
+Engineering,2000,Male,"4,459",84.2
+Education,2000,Male,"2,260",35.1
+Humanities and arts,2000,Male,"2,786",51
+Physical sciences and earth sciences,2015,Male,"3,935",66.4
+Engineering,2015,Male,"7,596",76.8
+Education,2015,Male,"1,614",31.5
+Humanities and arts,2015,Male,"2,767",49.4
