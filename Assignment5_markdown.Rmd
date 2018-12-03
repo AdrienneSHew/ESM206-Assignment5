@@ -110,7 +110,7 @@ PHDs_women<-PHDs %>%
 PHDs_women
 
 #########################################################################################
-#create table of women PHDs
+#create graph of shift in PhDs awarded to women (separated  by field) over the years (must create new original data frame including all years)
 
 PHDs_women_table<-PHDs_women %>% 
   kable() %>% 
@@ -121,10 +121,26 @@ PHDs_women_table
 ##############################################################################
 
 PHDs_tidy<-expand.dft(data.frame(PHDs), freq="Number")
+PHDs_tidy
 
 #Perform chi-square to determine shift in PhDs awarded to women
 
+women_PHD_chi<-PHDs_tidy %>%
+  count(Year, Gender) %>% 
+  spread(Gender, n) %>% 
+  select(-Year)
 
+rownames(women_PHD_chi)<- c("1985", "2000", "2015")
+
+women_PHD_chi
+#_____________________________________________________________________________
+
+women_PHD_x2<-chisq.test(women_PHD_chi)
+women_PHD_x2 #X(2)=247.84 p<0.001
+#_____________________________________________________________________________
+
+women_PHD_prop<-prop.table(as.matrix(women_PHD_chi), 1)
+women_PHD_prop
 
 ```
 
