@@ -9,13 +9,15 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, echo=FALSE, include=FALSE}
 
 library(tidyverse)
 library(kableExtra)
 library(stargazer)
 library(car)
 library(vcdExtra)
+library(knitr)
+library(extrafont)
 #____________________________________________________________________________
 Faculty_sal<-read_csv("faculty_salary.csv")
 Faculty_sal
@@ -99,7 +101,7 @@ female_grad_final_graph
 
 ```
 
-```{r}
+```{r, include=FALSE}
 #Step 2. Describe if and how there was a shift in PhDs awarded to females in four ﬁelds (Physical and Earth Sciences, Engineering, Education, and Humanities & Arts) in 1985, 2000, and 2015. 
 
 PHDs_women<-PHDs %>% 
@@ -149,7 +151,7 @@ women_PHD_prop
 ```
 
 
-```{r}
+```{r, include=FALSE}
 
 #3. attempting to do exploratory graphs on median salaray data in order to determine normality....yeaaa, not sure how to get it to plot; will ask Allison or someone after lab
 
@@ -196,8 +198,8 @@ faculty_coll <- cor(Faculty_sal$Years_Since_PhD, Faculty_sal$Years_Faculty_Servi
 faculty_coll
 #0.9096491 <- this indicates strong linear relationship
 
+AIC(facultysal_lm)
 
-# Looking at distribution of residuals 
 
 ```
 
@@ -212,6 +214,8 @@ summary(facultysal_lm2)
 
 #model still revealed salary decaresing with increasing service years
 
+AIC(facultysal_lm2)
+
 ```
 
 ```{r}
@@ -225,6 +229,36 @@ summary(facultysal_lm3)
 # This model showed salary increasing when # of years since PhD increases
 
 plot(facultysal_lm3)
+
+AIC(facultysal_lm3)
+
+```
+```{r, echo=FALSE, include=FALSE}
+
+# Relevel the rank so that assistant professor is the reference level
+
+Faculty_sal$Faculty_Rank <- factor(Faculty_sal$Faculty_Rank)
+
+Faculty_sal$Faculty_Rank <- fct_relevel(Faculty_sal$Faculty_Rank, "AsstProf")
+
+facultysal_lm3 <- lm(Salary ~ Faculty_Rank + Discipline + Years_Since_PhD + Sex, data = Faculty_sal)
+
+summary(facultysal_lm3) #new version of model 3 with new rank levels; now asistant professor is the reference for rank
+
+
+```
+dep.var.labels = "Salary", 
+          covariate.labels = "Associate Professor", " Professor", "Discipline", "Male", "Years Since Receiving PhD")
+```{r results = 'asis', echo = FALSE}
+#Regression table using stargazer
+
+stargazer(facultysal_lm3, type = "html", align=TRUE,
+          title = "Faculty Salary regression results",
+          dep.var.labels = "Salary", 
+          covariate.labels = c("Associate Professor", " Professor", "Discipline", "Years Since Receiving PhD","Male")) 
+          
+          
+          
 
 ```
 
