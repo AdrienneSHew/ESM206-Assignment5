@@ -53,7 +53,7 @@ grad_enroll_plot<-ggplot(Grad_enroll, aes(x=Year, y=Total))+
 grad_enroll_plot
 
 #The data is fairly linear, so I will perform the linear regressions
-#########################################################################################
+#_______________________________________________________________________________
 
 male_grad_lm<-lm(Total_Males~Year, data=Grad_enroll)
 male_grad_lm    #Total_Males= 9069(Year)-17112153
@@ -61,7 +61,7 @@ male_grad_lm    #Total_Males= 9069(Year)-17112153
 female_grad_lm<-lm(Total_Females~Year, data=Grad_enroll)
 female_grad_lm   #Total_Females= 30126(Year)-58955502
 
-##########################################################################################
+#___________________________________________________________________________________
 #View model residuals (check for homoscedasticity, normality of the error distribution)
 
 par(mfrow=c(2,2))
@@ -69,12 +69,16 @@ plot(male_grad_lm)
 
 plot(female_grad_lm)
 
-#########################################################################################
+#____________________________________________________________________________________
 #Does year significantly predict male/female enrollment in grad school?
 
 summary(male_grad_lm) #R2=0.85, p<0.001
 
+cor.test(Grad_enroll$Year, Grad_enroll$Total_Males) #R=0.92
+
 summary(female_grad_lm) #R2=0.98, p<0.001
+
+cor.test(Grad_enroll$Year, Grad_enroll$Total_Females) #R=0.99
 ```
 
 
@@ -99,6 +103,10 @@ female_grad_final_graph<-ggplot(Grad_enroll, aes(x=Year, y=Total_Females))+
 
 female_grad_final_graph
 
+#______________________________________________________________________________
+#Try to put both models onto one plot
+
+
 ```
 
 ```{r, include=FALSE}
@@ -112,7 +120,7 @@ PHDs_women<-PHDs %>%
 PHDs_women
 
 #_____________________________________________________________________________
-#create graph of shift in PhDs awarded to women (separated  by field) over the years (must create new original data frame including all years)
+#create graph of shift in PhDs awarded to women (separated  by field) over the years 
 
 PHDs_women_1<-PHDs_all_years %>% 
   filter(Gender=="Female")
