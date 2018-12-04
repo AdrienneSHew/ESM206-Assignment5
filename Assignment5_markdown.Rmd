@@ -42,7 +42,7 @@ PHDs_all_years
 ```{r}
 #Is there a correlation between time and the number of males/females enrolled in grad school? Perform a linear regression to answer this question. 
 
-##########################################################################################
+#_____________________________________________________________________________
 #Step 1. Exploratory analysis; Does it look like describing the relationship between year and graduate enrollment using linear regression makes sense?
 
 grad_enroll_plot<-ggplot(Grad_enroll, aes(x=Year, y=Total))+
