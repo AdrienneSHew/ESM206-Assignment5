@@ -1,0 +1,302 @@
+---
+title: "Final Report Assignment 5"
+author: "Adrienne Hewitt, Shellby Johnson"
+date: "December 4, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo=FALSE, include=FALSE}
+
+library(tidyverse)
+library(kableExtra)
+library(stargazer)
+library(car)
+library(vcdExtra)
+library(knitr)
+library(extrafont)
+#____________________________________________________________________________
+Faculty_sal<-read_csv("faculty_salary.csv")
+Faculty_sal
+
+Grad_enroll<-read_csv("grad_enrollment.csv")
+Grad_enroll
+
+NonPD_mediansalary <- read_csv("Non_postdoc_mediansalary.csv")
+NonPD_mediansalary
+
+PD_mediansalary <- read_csv("Postdoc_mediansalary.csv")
+PD_mediansalary
+
+PHDs<-read_csv("PHDs_simple.csv")
+PHDs
+
+PHDs_all_years<-read_csv("PHDs_1.csv")
+PHDs_all_years
+
+```
+
+```{r}
+#Is there a correlation between time and the number of males/females enrolled in grad school? Perform a linear regression to answer this question. 
+
+#_____________________________________________________________________________
+#Step 1. Exploratory analysis; Does it look like describing the relationship between year and graduate enrollment using linear regression makes sense?
+
+grad_enroll_plot<-ggplot(Grad_enroll, aes(x=Year, y=Total))+
+  geom_point()+
+  geom_point(data=Grad_enroll, aes(x=Year, y=Total_Males), color="blue")+
+  geom_point(data=Grad_enroll, aes(x=Year, y=Total_Females), color="red")
+
+grad_enroll_plot
+
+#The data is fairly linear, so I will perform the linear regressions
+#_______________________________________________________________________________
+
+male_grad_lm<-lm(Total_Males~Year, data=Grad_enroll)
+male_grad_lm    #Total_Males= 9069(Year)-17112153
+
+female_grad_lm<-lm(Total_Females~Year, data=Grad_enroll)
+female_grad_lm   #Total_Females= 30126(Year)-58955502
+
+#___________________________________________________________________________________
+#View model residuals (check for homoscedasticity, normality of the error distribution)
+
+par(mfrow=c(2,2))
+plot(male_grad_lm)
+
+plot(female_grad_lm)
+
+#____________________________________________________________________________________
+#Does year significantly predict male/female enrollment in grad school?
+
+summary(male_grad_lm) #R2=0.85, p<0.001
+
+cor.test(Grad_enroll$Year, Grad_enroll$Total_Males) #R=0.92
+
+summary(female_grad_lm) #R2=0.98, p<0.001
+
+cor.test(Grad_enroll$Year, Grad_enroll$Total_Females) #R=0.99
+```
+
+
+```{r}
+#Step 1a. Finalized linear model
+
+male_grad_final_graph<-ggplot(Grad_enroll, aes(x=Year, y=Total_Males))+
+  geom_point()+
+  geom_smooth(method=lm, se=TRUE, size=0.5, color="gray20")+
+  theme_bw()+
+  scale_x_continuous(expand=c(0,0), limits=c(1967,2015))
+
+male_grad_final_graph
+
+#____________________________________________________________________________
+
+female_grad_final_graph<-ggplot(Grad_enroll, aes(x=Year, y=Total_Females))+
+  geom_point()+
+  geom_smooth(method=lm, se=TRUE, size=0.5, color="gray20")+
+  theme_bw()+
+  scale_x_continuous(expand=c(0,0), limits=c(1967,2015))
+
+female_grad_final_graph
+
+#______________________________________________________________________________
+#Try to put both models onto one plot
+
+grad_final_graph<-ggplot(Grad_enroll, aes(x=Year, y=Total_Males))+
+  geom_point(aes(y=Total_Males, color="Males"))+
+  geom_smooth(method=lm, se=TRUE, size=0.5, color="blue")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0), limits=c(1967,2015))+
+  scale_y_continuous(expand=c(0,0))+
+  geom_point(data=Grad_enroll, aes(x=Year, y=Total_Females, color="Females"))+
+  geom_smooth(data=Grad_enroll, aes(x=Year, y=Total_Females), method=lm, se=TRUE, size=0.5, color="red")+
+  labs(y="Graduate Enrollment")+
+  theme(legend.title = element_blank())+
+  scale_color_manual(values=c("red","blue"))
+  
+
+  
+
+grad_final_graph
+
+
+```
+
+```{r, include=FALSE}
+#Step 2. Describe if and how there was a shift in PhDs awarded to females in four ﬁelds (Physical and Earth Sciences, Engineering, Education, and Humanities & Arts) in 1985, 2000, and 2015. 
+
+PHDs_women<-PHDs %>% 
+  filter(Gender=="Female") %>%
+  mutate(Total_PhD_recipients=Number/Percent*100) %>% 
+  group_by(Year, Field_of_study)
+
+PHDs_women
+
+#_____________________________________________________________________________
+#create graph of shift in PhDs awarded to women (separated  by field) over the years 
+
+PHDs_women_1<-PHDs_all_years %>% 
+  filter(Gender=="Female")
+PHDs_women_1
+
+PHD_graph<-ggplot(PHDs_women_1, aes(x=Year, y=Number))+
+  geom_point()+
+  geom_line(aes(color=Field_of_study))+
+  theme_classic()+
+  scale_x_continuous(limits = c(1985,2015))+
+  labs(y="Number of Doctorate Recipients")+
+  scale_color_discrete(name="Field of Study")
+  
+  
+PHD_graph
+#_____________________________________________________________________________
+
+PHDs_tidy<-expand.dft(data.frame(PHDs), freq="Number")
+PHDs_tidy
+
+#Perform chi-square to determine shift in PhDs awarded to women
+
+women_PHD_chi<-PHDs_tidy %>%
+  count(Year, Gender) %>% 
+  spread(Gender, n) %>% 
+  select(-Year)
+
+rownames(women_PHD_chi)<- c("1985", "2000", "2015")
+
+women_PHD_chi
+#_____________________________________________________________________________
+
+women_PHD_x2<-chisq.test(women_PHD_chi)
+women_PHD_x2 #X(2)=247.84 p<0.001
+#_____________________________________________________________________________
+
+women_PHD_prop<-prop.table(as.matrix(women_PHD_chi), 1)
+women_PHD_prop
+#______________________________________________________________________________
+
+prop_table<-women_PHD_prop %>% 
+  kable(col.names = c("Female", "Male")) %>% 
+  kable_styling()
+
+prop_table
+
+#COME BACK
+```
+
+
+```{r, include=FALSE}
+
+#3. attempting to do exploratory graphs on median salaray data in order to determine normality....yeaaa, not sure how to get it to plot; will ask Allison or someone after lab
+
+
+#exploratory histogram for male PD median salaries
+PD_median_hist <- ggplot(PD_mediansalary, aes(x = Male))+
+  geom_histogram( bins = 10)
+PD_median_hist
+
+# didn't do exploratory graphs for others because according to Allison, this is the test that needs to be done (from someone who went to office hours yesterday)
+
+#paired, 2-sample MWU test (i.e. wilcoxon signed rank test) of post doc median salaries bwteen males and females
+
+paired_MWU_PD <- wilcox.test(PD_mediansalary$Male, PD_mediansalary$Female, paired = TRUE)  
+  
+paired_MWU_PD #p-value = 0.8884
+
+#paired, 2-sample MWU test (i.e. wilcoxon signed rank test) of nonpost doc median salaries bwteen males and females
+paired_MWU_NonPD <- wilcox.test(NonPD_mediansalary$Male, NonPD_mediansalary$Female, paired = TRUE)  
+  
+paired_MWU_NonPD #p-value = 0.002572
+
+
+
+
+
+```
+
+```{r}
+#4. Multivariate Linear Regression Model 
+
+facultysal_lm <- lm(Salary ~ Faculty_Rank + Discipline + Years_Since_PhD + Years_Faculty_Service + Sex, data = Faculty_sal)
+
+summary(facultysal_lm)
+
+# This initial model revealed that with every 1 year increase in teaching experience (service), salary is expected to decrease by ~ $490.00. This doesn't make a whole bunch of sense as more experience usually leads to an increase in pay. 
+
+#Makes me think that there may be collinearity between both "years" variables
+
+### Check for collinearity between service and years since PhD
+
+faculty_coll <- cor(Faculty_sal$Years_Since_PhD, Faculty_sal$Years_Faculty_Service)
+
+faculty_coll
+#0.9096491 <- this indicates strong linear relationship
+
+AIC(facultysal_lm)
+
+
+```
+
+```{r}
+#4a. 2nd version of model excluding "Years_since_PhD" 
+
+#Choosing to exclude this variable, because conceptually, how long an individual has been teaching seems like it would be more relevant and would include having a PhD. How long a person has had their PhD, would weigh less if they haven't also been teaching.
+
+facultysal_lm2 <- lm(Salary ~ Faculty_Rank + Discipline + Years_Faculty_Service + Sex, data = Faculty_sal)
+
+summary(facultysal_lm2)
+
+#model still revealed salary decaresing with increasing service years
+
+AIC(facultysal_lm2)
+
+```
+
+```{r}
+
+#4b. 3rd version of model excluding "Years_Faculty_Service"
+
+facultysal_lm3 <- lm(Salary ~ Faculty_Rank + Discipline + Years_Since_PhD + Sex, data = Faculty_sal)
+
+summary(facultysal_lm3)
+
+# This model showed salary increasing when # of years since PhD increases
+
+plot(facultysal_lm3)
+
+AIC(facultysal_lm3)
+
+```
+```{r, echo=FALSE, include=FALSE}
+
+# Relevel the rank so that assistant professor is the reference level
+
+Faculty_sal$Faculty_Rank <- factor(Faculty_sal$Faculty_Rank)
+
+Faculty_sal$Faculty_Rank <- fct_relevel(Faculty_sal$Faculty_Rank, "AsstProf")
+
+facultysal_lm3 <- lm(Salary ~ Faculty_Rank + Discipline + Years_Since_PhD + Sex, data = Faculty_sal)
+
+summary(facultysal_lm3) #new version of model 3 with new rank levels; now asistant professor is the reference for rank
+
+
+```
+dep.var.labels = "Salary", 
+          covariate.labels = "Associate Professor", " Professor", "Discipline", "Male", "Years Since Receiving PhD")
+```{r results = 'asis', echo = FALSE}
+#Regression table using stargazer
+
+stargazer(facultysal_lm3, type = "html", align=TRUE,
+          title = "Faculty Salary regression results",
+          dep.var.labels = "Salary", 
+          covariate.labels = c("Associate Professor", " Professor", "Discipline", "Years Since Receiving PhD","Male")) 
+          
+          
+          
+
+```
+
