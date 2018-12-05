@@ -2,7 +2,9 @@
 title: "Final Report Assignment 5"
 author: "Adrienne Hewitt, Shellby Johnson"
 date: "December 4, 2018"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -39,8 +41,31 @@ PHDs_all_years<-read_csv("PHDs_1.csv")
 PHDs_all_years
 
 ```
+Introduction:
+ Education is an important goal for many and is considered a vital factor in determining how successful an individual is expected to be both financially and socially. People who can complete higher levels of education outside of high school, and more specifically, outside of their undergraduate studies, are considered more likely to secure “higher lifetime earnings, enhanced occupational status, better working conditions, and a lower probability of unemployment” (perna). Moreover, individuals who go on to matriculate through a doctoral program are set even further above their counterparts with master’s degrees (Gordon et al). However, there are variables that can affect initial enrollment into a graduate program and furthermore, salary amount obtained once the degree, specifically a PhD, is received.
 
-```{r}
+Gender is a common variable that plays a significant role in the make-up of graduate students in the United States. Past studies show that although women tended to earn more bachelor’s degrees, they “receive fewer doctoral and first-professional degrees than men” (perna). Women constituted only 44 and 45 percent of the PhDs and first-professional degrees awarded between 1999 and 2000, respectively, yet 55 percent of the bachelor’s degrees earned between 1994-1995 were awarded to women (perna). Recently, the National Center for Education Statistics reported a 42 percent increase in female graduate enrollment between 2000 and 2010, and fall 2016 reports showed that female students made up 59 percent of graduate enrollment (nces). Male students fell behind their female counterparts constituting just 41 percent of graduate students enrolled in post-baccalaureate degree programs in 2016 (nces).
+
+In conjunction with gender, field of study and sector can ultimately sway the distribution of enrolled students and affect compensation post-graduation. Programs such as health sciences, education, engineering, and biological/biomedical sciences all saw an increase in the number of PhDs awarded between 2000 and 2001 and 2015 and 2016 (nces). Should students go on to work in a large university setting as a faculty member, Gordon et al found that individuals with an M.D.  working in the medical school earn “93 percent more than an otherwise comparable Ph.D. in the social sciences.” Overall, women were found, on average, to earn about 9.5 percent less than that of comparable men in their departments (Gordon). Additionally, Burke et al discovered through modeling data from a unionized, public, liberal arts college that female faculty earn 85% of male faculty total salary.
+
+Whether a new PhD graduate goes into the academic sector (often postdoctoral positions) or non-postdoctoral positions, has also been researched. A study of eight midWest universities found that the largest percentage (57.1 %) of graduate students chose academia and 42.8 percent chose industry or government positions (38.7 % industry and 4.1% government) after graduation (zolas). Within one year of graduation, PhD recipients in industry positions made considerably more than those placed in academia or government positions; students who ended up in academia were found to have salaries below $50,000 per year (zolas).
+
+Within this scope, the following paper will explore the trends and differences in graduate enrollment, PhD recipients, and salary across various fields of study to determine the impact that gender, field of study, employment and other variables has on these trends.
+
+
+Data and Methods:
+
+Annual totals of post baccalaureate enrollment in degree granting postsecondary institutions was collected from 1967-2026 (2016-2026 were projected totals during this time); data was collected based on the attendance status of the student, the sex of the student, and whether or not an institution was public or private and was collected by the U.S. Department of Education, National Center for Education Statistics.*
+
+Data on the numbers of doctorate recipients and their median salaries was collected through the Survey of Earned Doctorates beginning in 1957. This survey was sponsored primarily by the National Science Foundation (National Center for Science and Engineering Statistics) and is conducted via web-based surveys, self-administered paper surveys, and computer-assisted telephone interviews once students apply for graduation.*
+
+Between 2008 and 2009, a survey of 397 U.S. professors was conducted by to obtain information on salaries. Data included salary information based on rank (associate, assistant, or full professor), discipline (theoretical or applied), years since receiving PhD, years of service, and sex.*
+
+For the purposes of this paper, graduate enrollment data only from 1967-2015 was used to compare enrollment trends between males and females with respect to attendance status and school status (public/private). A chi-square ($\chi$^2^) test was used to determine if there were any significant shifts in the number of PhDs earned by women across 4 disciplines during 1985, 2000, and 2015 only: Physical and Earth Sciences, Engineering, Education, and Humanities and Arts ($\alpha$ = 0.05 unless otherwise stated). Using two separate, paired Wilcoxon signed-rank tests, median salaries for male and female doctoral recipients was compared (within their respective disciplines) to determine significant differences, if any, between male and females entering postdoctoral positions and those entering non-postdoctoral positions. Finally, a multivariate linear regression model was developed to explore relationships between multiple explanatory variables (should I list?) and faculty salary from the 2008-2009 survey data. All graphics and data were created and performed in R Statistical Software.*
+
+ 
+
+```{r, include=FALSE}
 #Is there a correlation between time and the number of males/females enrolled in grad school? Perform a linear regression to answer this question. 
 
 #_____________________________________________________________________________
@@ -83,7 +108,7 @@ cor.test(Grad_enroll$Year, Grad_enroll$Total_Females) #R=0.99
 ```
 
 
-```{r}
+```{r, include=FALSE }
 #Step 1a. Finalized linear model
 
 male_grad_final_graph<-ggplot(Grad_enroll, aes(x=Year, y=Total_Males))+
@@ -107,6 +132,15 @@ female_grad_final_graph
 #______________________________________________________________________________
 #Try to put both models onto one plot
 
+
+
+
+```
+Results
+
+Linear regressions modeling the relationship between year and student enrollment, by sex, show overall increases in the number of both males and females enrolled in graduate school, from 1967-2015 (Figure 1). Year significantly predicts male enrollment (b=9069, t(47)=16.61, p<0.001) with a strong positive correlation between the two (Pearson’s r=0.92). The overall model (male enrollment= 9069(Year)-17112153) explains a significant amount of variance in male enrollment (F(1, 47)=276, p<0.001, R2=0.85). Year also significantly predicts female enrollment (b=30126 t(47)=51.66, p<0.001) with a strong positive correlation between the two (Pearson’s r=0.99). The overall model (female enrollment= 30126(Year)- 58955502) explains a significant amount of variance in male enrollment (F(1, 47)=2669, p<0.001, R2=0.98).
+
+```{r, echo=FALSE}
 grad_final_graph<-ggplot(Grad_enroll, aes(x=Year, y=Total_Males))+
   geom_point(aes(y=Total_Males, color="Males"))+
   geom_smooth(method=lm, se=TRUE, size=0.5, color="blue")+
@@ -124,9 +158,9 @@ grad_final_graph<-ggplot(Grad_enroll, aes(x=Year, y=Total_Males))+
 
 grad_final_graph
 
-
 ```
 
+**Figure 1. Relationship between year and student enrollment, by gender.** The model (male enrollment= 9069(Year)-17112153) explains a significant amount of variance in male enrollment (F(1, 47)=276, p<0.001, *R*^2^=0.85, Pearson’s *r* =0.92). The model (female enrollment= 30126(Year)- 58955502) also explains a significant amount of variance in female enrollment (F(1, 47)=2669, p<0.001, *R*^2^=0.98,Pearson’s *r*=0.99). ** add source
 ```{r, include=FALSE}
 #Step 2. Describe if and how there was a shift in PhDs awarded to females in four ﬁelds (Physical and Earth Sciences, Engineering, Education, and Humanities & Arts) in 1985, 2000, and 2015. 
 
@@ -145,11 +179,11 @@ PHDs_women_1<-PHDs_all_years %>%
 PHDs_women_1
 
 PHD_graph<-ggplot(PHDs_women_1, aes(x=Year, y=Number))+
-  geom_point()+
   geom_line(aes(color=Field_of_study))+
+  geom_point()+
   theme_classic()+
   scale_x_continuous(limits = c(1985,2015))+
-  labs(y="Number of Doctorate Recipients")+
+  labs(y="Number of Female Doctorate Recipients")+
   scale_color_discrete(name="Field of Study")
   
   
@@ -178,15 +212,22 @@ women_PHD_x2 #X(2)=247.84 p<0.001
 women_PHD_prop<-prop.table(as.matrix(women_PHD_chi), 1)
 women_PHD_prop
 #______________________________________________________________________________
-
-prop_table<-women_PHD_prop %>% 
-  kable(col.names = c("Female", "Male")) %>% 
-  kable_styling()
-
-prop_table
-
-#COME BACK
 ```
+
+When plotting the number of female doctorate recipients against year (from 1985 to 2015), positive trends are seen in the four fields of study: Education, Engineering, Humanities and Arts, and Physical- and Earth- Sciences (Figure 2). In the sciences and engineering fields, the rate of increase is relatively small from 1985 until 2000—the number of females receiving doctorates increases by 453 and 640, respectively. After 2000, the rate of growth of female doctorate recipients increases more than two-fold in both fields. The rate of growth in the Humanities and Arts field is fairly steady, despite a slight decrease in from 2000 to 2010; Education has the highest overall numbers of female doctorate recipients along with the smallest growth rate. It can be noted also that there is a decrease by about 1,000 in the number of female doctorate recipients from 2005 to 2015. 
+
+
+```{r, echo=FALSE}
+PHD_graph
+```
+**Figure 2. Female doctorate recipients (1985-2015).** Annual total female doctorate recipients in Education (red line), Engineering (green line), Humanities and Arts (blue line), and Physical and Earth Sciences (purple line). **add source
+
+A Chi-square ($\chi$^2^) test indicates a significant difference in the proportion of male and female doctorate recipients between the years of 1985, 2000, and 2015 ($\chi$^2^ (2)=248, p<0.001). (What are the differences?) 
+
+Median salaries were compared for male and female doctoral recipients using paired Wilcoxon signed rank tests and reveals that for those doing postdoctoral study, there is so significant difference between male and female median salaries (V=19.5, p=0.89). However, for those gaining employment upon completion of their doctorate, there is a significant difference in median salary, by sex (V=101, p=0.003).
+
+
+**Table 1. Proportions of male versus female doctorate recipients (1985, 2000, 2015).** There is a significant difference in the proportion of male and female doctorate candidates across the 3 years ($\chi$^2^ (2)=248, p<0.001). **add source
 
 
 ```{r, include=FALSE}
@@ -218,7 +259,7 @@ paired_MWU_NonPD #p-value = 0.002572
 
 ```
 
-```{r}
+```{r, inlcude = FALSE}
 #4. Multivariate Linear Regression Model 
 
 facultysal_lm <- lm(Salary ~ Faculty_Rank + Discipline + Years_Since_PhD + Years_Faculty_Service + Sex, data = Faculty_sal)
@@ -241,7 +282,7 @@ AIC(facultysal_lm)
 
 ```
 
-```{r}
+```{r, include= FALSE}
 #4a. 2nd version of model excluding "Years_since_PhD" 
 
 #Choosing to exclude this variable, because conceptually, how long an individual has been teaching seems like it would be more relevant and would include having a PhD. How long a person has had their PhD, would weigh less if they haven't also been teaching.
@@ -256,7 +297,7 @@ AIC(facultysal_lm2)
 
 ```
 
-```{r}
+```{r, include=FALSE}
 
 #4b. 3rd version of model excluding "Years_Faculty_Service"
 
@@ -271,7 +312,8 @@ plot(facultysal_lm3)
 AIC(facultysal_lm3)
 
 ```
-```{r, echo=FALSE, include=FALSE}
+
+```{r,include=FALSE}
 
 # Relevel the rank so that assistant professor is the reference level
 
@@ -285,8 +327,9 @@ summary(facultysal_lm3) #new version of model 3 with new rank levels; now asista
 
 
 ```
-dep.var.labels = "Salary", 
-          covariate.labels = "Associate Professor", " Professor", "Discipline", "Male", "Years Since Receiving PhD")
+
+A multivariate linear regression model was used to explore the relationship between independent variables of faculty rank, discipline, years since doctorate, and sex, and the dependent variable of faculty salary. The model (faculty salary=67884.32+ 13104(Associate Professor)+ 46032.55(Professor)+ 13937(Applied)+ 61.01(Years since PhD)+ 4349.37(Male)) explains a significant amount of variance in faculty salary (F(5, 391)=63.27, p<0.001, R2=0.44). (Describe interesting findings and concerns of the model, here or in discussion)
+
 ```{r results = 'asis', echo = FALSE}
 #Regression table using stargazer
 
@@ -299,4 +342,32 @@ stargazer(facultysal_lm3, type = "html", align=TRUE,
           
 
 ```
+
+Discussion
+The results of our data exploration confirm the findings of similar reports, that women are increasingly earning higher-level degrees but are still making less money than men. Data beginning from 1967 showed that the number of women enrolled in graduate school was initially less than the number of men, but by 1988 enrollment of women had surpassed that of men. As of 2015, about 1.75 million women were enrolled in graduate school, compared to approximately 1.25 million males.
+
+Women are also earning more higher-level post-baccalaureate degrees, especially in STEM fields—in 1985 there were only about 200 female engineering doctorate recipients and 570 female doctorate recipients in the physical and earth science fields. In 2015, the number of females receiving doctorates was nearly 12 and 4 times that of 1985 numbers, in their respective fields. Numbers of female doctoral recipients have always been much higher in the education and humanities and arts fields, but in the last decade, there has been a decrease in the number of female doctorate recipients in Education. It may be that as more females are pursuing academic paths in the STEM fields, fewer are going into traditionally female-dominant fields, such as education (citation). Nonetheless, men still make up most doctoral recipients, though the ratio of women to men has improved; there was a 1:3 ratio in 1985 which has increased and been a 2:3 ratio of women to men as of 2000.
+
+It is both interesting and important to see that there is a relationship between gender and salary, even at the post-doctorate level. Our data showed no significant difference in the median salaries of males and females completing post-doctoral academic programs, but there was a difference in male and female median salaries among those who entered the workforce after gaining their doctorate degrees. According to our data, men earned an average median salary of ____ compared to _____ for women. Even in the multivariate model that we created, sex was a factor that influenced faculty salary—if all other variables were held constant, a male faculty member would make about $4,350 more annually than a female faculty member.
+
+Conclusion
+This report is useful for visualizing historical trends relating women and education, and measuring, through quantitative data, the issue of gender inequality in academic and corporate spaces. Understanding the presence that women have had in academia in the past can provide insight into the current state of the institution, as well as illustrate the social progress that has been made in creating more inclusive spaces for both men and women. The major findings of this report are that:
+        I.            The number of women enrolled in graduate school has increased since 1967 and has surpassed the number of men enrolled by approximately half a million individuals, as of 2015.
+      II.            The number of women earning PhDs in STEM fields is increasing drastically; on the flip side, the number of female doctorate recipients in the education field has been declining since 2005.
+    III.            In general, men still make up most doctorate recipients, though the ratio between genders is improving.
+    IV.            In both academic and corporate career fields, women generally make less money than men, even at the doctorate level.
+It is encouraged that future reports further investigate other variables that may influence enrollment in higher education institutions and ultimately, salary. Race is one such factor that, when compounded with gender, may significantly impact trends seen in college enrollment and salary. We hope that this report serves as a useful contribution to the work done to end gender inequalities in academia and other spaces.
+
+
+References:
+
+Gordon, N. M., Morton, T. E., & Braden, I. C. (June 1974). Faculty Salaries: Is there Discrimination by Sex, Race, and Discipline? American Economic Association, 64(3), 419-427. Retrieved from https://www.jstor.org/stable/1808892
+
+Graduate Degree Fields. (2018, March). Retrieved December 2018, from National Center for Education Statistics: https://nces.ed.gov/programs/coe/indicator_ctb.asp
+
+Perna, L. W. (2004). Understanding the Decision to Enroll in Graduate School: Sex and Racial/Ethnic Group Differences. The Journal of Higher Education, 75(5), 487-527. doi: https://doi.org/10.1080/00221546.2004.11772335
+
+Postbaccalaureate Enrollment. (2018, May). Retrieved December 1, 2018, from National Center for Education Statistics: https://nces.ed.gov/programs/coe/indicator_chb.asp
+
+Zolas, N., Goldschlag, N., Jarmin, R., Stephan, P., Owen-Smith, J., McFadden Allen, B., . . . Lane, J. I. ( 2015, Dec 11). Wrapping it up in a person: Examining employment and earnings outcomes for Ph.D. recipients. Science, 350(6266), 1367-1371. doi:10.1126/science.aac5949 
 
