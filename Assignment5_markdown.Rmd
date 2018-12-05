@@ -106,6 +106,23 @@ female_grad_final_graph
 #______________________________________________________________________________
 #Try to put both models onto one plot
 
+grad_final_graph<-ggplot(Grad_enroll, aes(x=Year, y=Total_Males))+
+  geom_point(aes(y=Total_Males, color="Males"))+
+  geom_smooth(method=lm, se=TRUE, size=0.5, color="blue")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0), limits=c(1967,2015))+
+  scale_y_continuous(expand=c(0,0))+
+  geom_point(data=Grad_enroll, aes(x=Year, y=Total_Females, color="Females"))+
+  geom_smooth(data=Grad_enroll, aes(x=Year, y=Total_Females), method=lm, se=TRUE, size=0.5, color="red")+
+  labs(y="Graduate Enrollment")+
+  theme(legend.title = element_blank())+
+  scale_color_manual(values=c("red","blue"))
+  
+
+  legend(grad_final_graph, 198, 198, legend = c("Male", "Female"), col = c("blue", "red"))
+
+grad_final_graph
+
 
 ```
 
@@ -129,8 +146,12 @@ PHDs_women_1
 PHD_graph<-ggplot(PHDs_women_1, aes(x=Year, y=Number))+
   geom_point()+
   geom_line(aes(color=Field_of_study))+
-  theme_classic()
-
+  theme_classic()+
+  scale_x_continuous(limits = c(1985,2015))+
+  labs(y="Number of Doctorate Recipients")+
+  scale_color_discrete(name="Field of Study")
+  
+  
 PHD_graph
 #_____________________________________________________________________________
 
@@ -155,7 +176,15 @@ women_PHD_x2 #X(2)=247.84 p<0.001
 
 women_PHD_prop<-prop.table(as.matrix(women_PHD_chi), 1)
 women_PHD_prop
+#______________________________________________________________________________
 
+prop_table<-women_PHD_prop %>% 
+  kable(col.names = c("Female", "Male")) %>% 
+  kable_styling()
+
+prop_table
+
+#COME BACK
 ```
 
 
